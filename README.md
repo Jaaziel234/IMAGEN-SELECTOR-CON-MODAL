@@ -1,0 +1,1 @@
+Este codigo en HTML y JS nos permitira Utilizar una imagen para seleccionar las partes. El sitio web: para generar las coordenadas se llama:https://imageonline.io/image-map-generator/. La idea es subir la imagen y seleccionar un area de la misma y automarticamanente genera el Código hrml
