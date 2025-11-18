@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mapa Interactivo del Vehículo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+
+        img {
+            width: 450px; /* puedes ajustar este tamaño */
+            height: auto;
+        }
+
+        /* ===== Modal ===== */
+        #modal-bg {
+            position: fixed;
+            inset: 0;
+            display: none;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modal {
+            background: white;
+            padding: 25px;
+            width: 300px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+        }
+
+        #closeBtn {
+            margin-top: 15px;
+            padding: 8px 15px;
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        #closeBtn:hover {
+            background: #0056b3;
+        }
+    </style>
+
+</head>
+<body>
+
+    <h2>Mapa interactivo del vehículo</h2>
+
+    <!-- Imagen con mapa -->
+    <img src="vehiculo-vector.png" alt="Vehículo" usemap="#image-map" id="vehiculoImg">
+
+    <!-- Imagen Mapa -->
+    <map name="image-map">
+        <area shape="rect" coords="710,310,863,477" href="#" data-text="Área 1 seleccionada">
+        <area shape="rect" coords="145,319,333,467" href="#" data-text="Área 2 seleccionada">
+        <area shape="rect" coords="155,975,323,1137" href="#" data-text="Área 3 seleccionada">
+        <area shape="rect" coords="715,980,847,1127" href="#" data-text="Área 4 seleccionada">
+        <area shape="rect" coords="313,197,389,289" href="#" data-text="Área 5 seleccionada">
+        <area shape="rect" coords="634,207,710,299" href="#" data-text="Área 6 seleccionada">
+        <area shape="rect" coords="364,1031,649,1168" href="#" data-text="Área 7 seleccionada">
+    </map>
+
+    <!-- Modal -->
+    <div id="modal-bg">
+        <div id="modal">
+            <p id="modal-text"></p>
+            <button id="closeBtn">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- ====================================== -->
+    <!-- JS: Modal + Responsive Image Map       -->
+    <!-- ====================================== -->
+    <script>
+        /* ======================
+           Modal funcional
+        ======================= */
+        const modalBg = document.getElementById("modal-bg");
+        const modalText = document.getElementById("modal-text");
+        const closeBtn = document.getElementById("closeBtn");
+
+        document.querySelectorAll("area").forEach(area => {
+            area.addEventListener("click", e => {
+                e.preventDefault();
+                modalText.textContent = area.dataset.text;
+                modalBg.style.display = "flex";
+            });
+        });
+
+        closeBtn.onclick = () => modalBg.style.display = "none";
+
+        modalBg.onclick = (e) => {
+            if (e.target === modalBg) modalBg.style.display = "none";
+        };
+
+        /* =======================================================
+           JS puro para hacer que el mapa sea RESPONSIVE
+        ======================================================= */
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const img = document.getElementById("vehiculoImg");
+            const mapName = img.getAttribute("usemap").replace("#", "");
+            const map = document.querySelector(`map[name="${mapName}"]`);
+
+            const areas = map.querySelectorAll("area");
+            const originalCoords = [];
+
+            // Guardar coords originales
+            areas.forEach(area => {
+                originalCoords.push(area.coords.split(',').map(Number));
+            });
+
+            function resizeMap() {
+                const naturalWidth = img.naturalWidth;
+                const naturalHeight = img.naturalHeight;
+
+                const displayedWidth = img.clientWidth;
+                const displayedHeight = img.clientHeight;
+
+                const xRatio = displayedWidth / naturalWidth;
+                const yRatio = displayedHeight / naturalHeight;
+
+                areas.forEach((area, index) => {
+                    const newCoords = originalCoords[index].map((c, i) =>
+                        i % 2 === 0 
+                            ? Math.round(c * xRatio)  // X
+                            : Math.round(c * yRatio)  // Y
+                    );
+
+                    area.coords = newCoords.join(",");
+                });
+            }
+
+            img.onload = resizeMap;
+            window.addEventListener("resize", resizeMap);
+            if (img.complete) resizeMap();
+        });
+    </script>
+
+</body>
+</html>
