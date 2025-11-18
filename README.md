@@ -27,4 +27,11 @@ Permite subir **cualquier imagen** y transformarla en un **mapa interactivo** do
 ## 🎨 Demo / Código listo para copiar
 
 ```html
+<img src="tu-imagen.jpg" alt="Mapa interactivo" usemap="#mi-mapa" style="max-width:100%; height:auto;">
 
+<map name="mi-mapa">
+  <!-- ¡Pega aquí las <area> que generaste! -->
+  <area shape="rect" coords="100,50,300,200" href="https://github.com" target="_blank" alt="GitHub">
+  <area shape="circle" coords="500,150,80" href="https://youtube.com" target="_blank" alt="YouTube">
+  <area shape="poly" coords="600,50,750,50,800,200,550,180" href="https://twitter.com" target="_blank" alt="Twitter">
+</map>
