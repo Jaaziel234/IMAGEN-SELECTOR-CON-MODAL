@@ -27,4 +27,4 @@ Permite subir **cualquier imagen** y transformarla en un **mapa interactivo** do
 ## 🎨 Demo / Código listo para copiar
 
 ```html
-<img src="tu-imagen.jpg" alt="Mapa interactivo" usemap="#mi-mapa" style="max-width:100%; height:auto;">
+
